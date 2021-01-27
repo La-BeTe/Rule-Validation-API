@@ -1,0 +1,27 @@
+{
+	"name": "rule-validation-api",
+	"version": "1.0.0",
+	"description": "Simple rule validation API",
+	"main": "app.js",
+	"scripts": {
+		"test": "jest --watch",
+		"deploy": "git push"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/La-BeTe/Rule-Validation-API.git"
+	},
+	"author": "La-BeTe",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/La-BeTe/Rule-Validation-API/issues"
+	},
+	"homepage": "https://github.com/La-BeTe/Rule-Validation-API#readme",
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"jest": "^26.6.3"
+	}
+}
