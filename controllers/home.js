@@ -2,7 +2,7 @@ const Response = require("../class_response");
 
 module.exports = function () {
 	const message = "My Rule-Validation API";
-	const status = "success";
+	const status = 200;
 	const data = {
 		name: process.env.NAME,
 		github: process.env.GITHUB,
