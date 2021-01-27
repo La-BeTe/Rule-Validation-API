@@ -2,7 +2,7 @@ const sendMyInfo = require("./home");
 
 test("sendMyInfo will return an object containing my details", () => {
 	const expectedData = JSON.stringify({
-		message: "My Rule-Validation API",
+		message: "My Rule-Validation API.",
 		status: "success",
 		data: {
 			name: "XXX XXX",
