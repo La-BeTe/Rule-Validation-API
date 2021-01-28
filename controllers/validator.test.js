@@ -16,7 +16,7 @@ const testBody = {
 	}
 };
 
-describe("validateRule should throw an error", () => {
+describe("validator should throw an error", () => {
 	test("if rule and data fields are missing", () => {
 		const body = {};
 		expect(() => validate(body)).toThrow(
@@ -43,10 +43,13 @@ describe("validateRule should throw an error", () => {
 			);
 		});
 		test("has an unallowed condition field", () => {
-			body.rule = {
-				field: "missons",
-				condition: "24",
-				condition_value: 20
+			const body = {
+				...testBody,
+				rule: {
+					field: "missons",
+					condition: "24",
+					condition_value: 20
+				}
 			};
 			expect(() => validate(body)).toThrow(
 				new Response(
@@ -85,33 +88,91 @@ describe("validateRule should throw an error", () => {
 	});
 });
 
-describe("should return response after validating data", () => {
-	test("success response", () => {
-		expect(validate(testBody)).toEqual(
-			new Response("field missions successfully validated.", 200, {
+describe("tests with examples provided", () => {
+	test("example 1", () => {
+		const body = {
+			rule: {
+				field: "missions",
+				condition: "gte",
+				condition_value: 30
+			},
+			data: {
+				name: "James Holden",
+				crew: "Rocinante",
+				age: 34,
+				position: "Captain",
+				missions: 45
+			}
+		};
+		const expected = {
+			message: "field missions successfully validated.",
+			status: "success",
+			data: {
 				validation: {
 					error: false,
 					field: "missions",
-					field_value: 30,
+					field_value: 45,
 					condition: "gte",
 					condition_value: 30
 				}
-			})
+			}
+		};
+		// Parse the JSON string so test does not fail due to
+		// arrangement of object properties by javascript
+		expect(JSON.parse(validate(body).toJSON())).toEqual(
+			JSON.parse(JSON.stringify(expected))
 		);
 	});
-	test("failed response", () => {
-		testBody.data.missions = 54;
-		expect(validate(testBody)).toEqual(
-			new Response("field missions failed validation.", 400, {
+	test("example 2", () => {
+		const body = {
+			rule: {
+				field: "0",
+				condition: "eq",
+				condition_value: "a"
+			},
+			data: "damien-marley"
+		};
+		const expected = {
+			message: "field 0 failed validation.",
+			status: "error",
+			data: {
 				validation: {
 					error: true,
-					field: "missions",
-					field_value: 30,
-					condition: "gte",
-					condition_value: 54
+					field: "0",
+					field_value: "d",
+					condition: "eq",
+					condition_value: "a"
 				}
-			})
+			}
+		};
+		// Parse the JSON string so test does not fail due to
+		// arrangement of object properties by javascript
+		expect(JSON.parse(validate(body).toJSON())).toEqual(
+			JSON.parse(JSON.stringify(expected))
 		);
-		testBody.data.missions = 30;
+	});
+	test("example 3", () => {
+		const body = {
+			rule: {
+				field: "5",
+				condition: "contains",
+				condition_value: "rocinante"
+			},
+			data: ["The Nauvoo", "The Razorback", "The Roci", "Tycho"]
+		};
+		const expected = {
+			message: "field 5 is missing from data.",
+			status: "error",
+			data: null
+        };
+        try{
+            validate(body);
+        }catch(e){
+            // Parse the JSON string so test does not fail due to
+            // arrangement of object properties by javascript
+            expect(JSON.parse(e.toJSON())).toEqual(
+                JSON.parse(JSON.stringify(expected))
+            );
+        }
 	});
 });
