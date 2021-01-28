@@ -59,7 +59,10 @@ function validate(field_value, condition_value, condition) {
 		case "gte":
 			return field_value >= condition_value;
 		case "contains":
-			return field_value.includes(condition_value);
+			return (
+				typeof field_value.includes === "function" &&
+				field_value.includes(condition_value)
+			);
 	}
 }
 

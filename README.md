@@ -2,8 +2,6 @@
 
 [![BuildStatus](https://travis-ci.com/La-BeTe/Rule-Validation-API.svg?branch=master)](https://travis-ci.com/La-BeTe/Rule-Validation-API)
 
-Repo for the FlutterWave Validation API
-
 Live API is available [here](https://lbt-rule-validation-api.herokuapp.com)
 
 ## **Endpoints**
