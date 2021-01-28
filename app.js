@@ -1,6 +1,7 @@
 const express = require("express");
 const { sendMyInfo, validator } = require("./controller");
 const Response = require("./class_response");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
@@ -10,6 +11,7 @@ app.use((_, res, next) => {
 	res.setHeader("Content-Type", "application/json");
 	next();
 });
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
