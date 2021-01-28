@@ -1,16 +1,16 @@
 const Response = require("../class_response");
 
 function hasProp(object, prop) {
-	if (typeof prop !== "string")
-		throw new Error(
-			`hasProp requires a string as second argument, got ${prop}`
-		);
-	if (typeof object === "string") return object[prop];
+	// Just in case prop is a number, like for arrays and strings ❌ ❌
+	// This would still work if prop is a number 👍 👍
+	// The line below is just for uniformity
+	prop = prop.toString();
+	if (typeof object === "string") return !!object[prop]; // Convert object[prop] to boolean
 	if (typeof object !== "object")
 		throw new Error(
 			`hasProp requires a object as first argument, got ${object}`
 		);
-	return object.hasOwnProperty(prop);
+	return Object.hasOwnProperty.call(object, prop);
 }
 
 function checkRule(rule) {
@@ -41,10 +41,10 @@ function checkData(data) {
 }
 
 function checkRuleAndData({ rule, data }) {
-	const ruleSyntaxIncorrect = checkRule(rule);
-	const dataSyntaxIncorrect = checkData(data);
-	if (ruleSyntaxIncorrect) return ruleSyntaxIncorrect;
-	if (dataSyntaxIncorrect) return dataSyntaxIncorrect;
+	const isRuleSyntaxIncorrect = checkRule(rule);
+	const isDataSyntaxIncorrect = checkData(data);
+	if (isRuleSyntaxIncorrect) return isRuleSyntaxIncorrect;
+	if (isDataSyntaxIncorrect) return isDataSyntaxIncorrect;
 	return "";
 }
 
@@ -83,8 +83,8 @@ module.exports = function (body) {
 	const returnData = {
 		validation: {
 			error,
-			field_value: data[field],
 			field,
+			field_value: data[field],
 			condition,
 			condition_value
 		}

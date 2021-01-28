@@ -1,11 +1,11 @@
 const sendMyInfo = require("./controllers/home");
-const validateRule = require("./controllers/validator");
+const validator = require("./controllers/validator");
 const Response = require("./class_response");
 
 function tryCatchWrap(cb) {
-	return function (_, res, next) {
+	return function (req, res, next) {
 		try {
-			const resp = cb();
+			const resp = cb(req.body);
 			if (resp instanceof Response) res.send(resp.toJSON());
 			else
 				throw new Error(
@@ -19,5 +19,5 @@ function tryCatchWrap(cb) {
 
 module.exports = {
 	sendMyInfo: tryCatchWrap(sendMyInfo),
-	validateRule: tryCatchWrap(validateRule)
+	validator: tryCatchWrap(validator)
 };
